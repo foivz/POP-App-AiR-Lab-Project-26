@@ -32,6 +32,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hr.foi.popapp.ui.components.PasswordTextField
+import hr.foi.popapp.ui.components.StyledButton
+import hr.foi.popapp.ui.components.StyledTextField
 import hr.foi.popapp.ui.theme.POPAppTheme
 import hr.foi.popapp.ui.theme.foiPrimary
 
@@ -80,75 +83,32 @@ fun RegistrationPage() {
     ) {
         Text(
             text = "Create an Account",
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(vertical = 16.dp)
         )
 
+        StyledTextField(label = "First name", value = firstName, onValueChange = { firstName = it })
 
-        OutlinedTextField(
-            label = { Text("First name") },
-            value = firstName,
-            onValueChange = { firstName = it },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        )
+        StyledTextField(label = "Last name", value = lastName, onValueChange = { lastName = it })
 
+        StyledTextField(label = "Username", value = username, onValueChange = { username = it })
 
-        OutlinedTextField(
-            label = { Text("Last name") },
-            value = lastName,
-            onValueChange = { lastName = it },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        )
+        StyledTextField(label = "Email", value = email, onValueChange = { email = it })
 
+        PasswordTextField(label = "Password", value = password, onValueChange = { password = it })
 
-        OutlinedTextField(
-            label = { Text("Username") },
-            value = username,
-            onValueChange = { username = it },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        )
-
-
-        OutlinedTextField(
-            label = { Text("Email") },
-            value = email,
-            onValueChange = { email = it },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        )
-
-
-        OutlinedTextField(
-            label = { Text("Password") },
-            value = password,
-            onValueChange = { password = it },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            visualTransformation = PasswordVisualTransformation()
-        )
-
-
-        OutlinedTextField(
-            label = { Text("Confirm password") },
+        PasswordTextField(
+            label = "Confirm password",
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            visualTransformation = PasswordVisualTransformation()
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
         )
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        Button(onClick = {}) {
-            Text("Register")
-        }
+        StyledButton(
+            label = "Register",
+            onClick = {}
+        )
     }
 }

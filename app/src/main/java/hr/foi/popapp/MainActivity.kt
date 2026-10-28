@@ -31,43 +31,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             POPAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Column(modifier = Modifier.padding(innerPadding)) {
+
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-        color = foiPrimary
-    )
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        var counter by remember { mutableStateOf(0) }
-        Text(text = "You've pressed a button $counter times")
-        Button(onClick = { counter++ },
-               colors = ButtonDefaults.buttonColors(containerColor = foiPrimary)
-        ) {
-            Text(text = "Press me")
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    POPAppTheme {
-        Greeting("Android")
-    }
-}

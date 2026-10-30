@@ -19,7 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hr.foi.popapp.models.Role
+import hr.foi.popapp.models.availableRoles
 import hr.foi.popapp.ui.components.PasswordTextField
+import hr.foi.popapp.ui.components.RoleSelector
 import hr.foi.popapp.ui.components.StyledButton
 import hr.foi.popapp.ui.components.StyledTextField
 
@@ -71,6 +74,13 @@ fun RegistrationPage() {
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+        )
+
+        var selectedRole by remember { mutableStateOf<Role>(availableRoles[0])}
+        RoleSelector(
+            roles = availableRoles,
+            selected = selectedRole,
+            onRoleSelected = { selectedRole = it }
         )
 
         Spacer(modifier = Modifier.height(50.dp))

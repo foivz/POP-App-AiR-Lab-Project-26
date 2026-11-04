@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import hr.foi.popapp.navigation.components.EntryPage
 import hr.foi.popapp.navigation.components.LoginPage
+import hr.foi.popapp.navigation.components.PostRegistrationNotice
 import hr.foi.popapp.navigation.components.RegistrationPage
 import hr.foi.popapp.ui.theme.POPAppTheme
 
@@ -39,7 +42,23 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("register") {
-                                RegistrationPage()
+                                RegistrationPage(
+                                    onSuccessfulRegistration = { newUsername ->
+                                        navController.navigate("register/$newUsername/notice")
+                                    }
+                                )
+                            }
+                            composable(
+                                "register/{username}/notice",
+                                arguments = listOf(navArgument("username") { type = NavType.StringType })
+                            ) { backStackEntry ->
+                                PostRegistrationNotice(
+                                    newUsername = backStackEntry.arguments?.getString("username") ?: "?",
+                                    onNoticeUnderstood = {
+                                        // Drop the form and the notice so Back can't return to them.
+                                        navController.popBackStack("entry", inclusive = false)
+                                    }
+                                )
                             }
                             composable("login") {
                                 LoginPage()

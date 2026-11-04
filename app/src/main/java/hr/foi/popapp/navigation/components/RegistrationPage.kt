@@ -27,7 +27,9 @@ import hr.foi.popapp.ui.components.StyledButton
 import hr.foi.popapp.ui.components.StyledTextField
 
 @Composable
-fun RegistrationPage() {
+fun RegistrationPage(
+    onSuccessfulRegistration: (newUsername: String) -> Unit
+) {
     var firstName by remember {
         mutableStateOf("")
     }
@@ -87,7 +89,8 @@ fun RegistrationPage() {
 
         StyledButton(
             label = "Register",
-            onClick = {}
+            // No API yet, so every registration is treated as successful.
+            onClick = { onSuccessfulRegistration(username) }
         )
     }
 }
@@ -95,5 +98,5 @@ fun RegistrationPage() {
 @Preview
 @Composable
 fun RegistrationPagePreview() {
-    RegistrationPage()
+    RegistrationPage({})
 }

@@ -61,7 +61,11 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("login") {
-                                LoginPage()
+                                LoginPage(
+                                    onSuccessfulLogin = {
+                                        navController.navigate("entry")
+                                    }
+                                )
                             }
                         }
                     }

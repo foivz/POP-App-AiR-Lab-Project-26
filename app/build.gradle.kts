@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":login_username_password"))
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material.icons.extended)

@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import hr.foi.popapp.navigation.components.EntryPage
+import hr.foi.popapp.navigation.components.LoginPage
 import hr.foi.popapp.navigation.components.RegistrationPage
 import hr.foi.popapp.ui.theme.POPAppTheme
 
@@ -21,7 +25,19 @@ class MainActivity : ComponentActivity() {
             POPAppTheme(dynamicColor = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
-                        EntryPage()
+                        val navController = rememberNavController()
+
+                        NavHost(navController, startDestination = "entry") {
+                            composable("entry") {
+                                EntryPage()
+                            }
+                            composable("register") {
+                                RegistrationPage()
+                            }
+                            composable("login") {
+                                LoginPage()
+                            }
+                        }
                     }
                 }
             }

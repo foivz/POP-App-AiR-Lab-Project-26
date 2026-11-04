@@ -1,6 +1,5 @@
 package hr.foi.popapp.navigation.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -18,7 +17,10 @@ import androidx.compose.ui.unit.dp
 import hr.foi.popapp.R
 
 @Composable
-fun EntryPage() {
+fun EntryPage(
+    onLoginButtonClick: () -> Unit,
+    onRegistrationButtonClick: () -> Unit,
+) {
     Scaffold(
         topBar = {
             Surface(color = MaterialTheme.colorScheme.primary, modifier = Modifier.fillMaxWidth()) {
@@ -58,9 +60,7 @@ fun EntryPage() {
             )
 
             Button(
-                onClick = {
-                    Log.i("BUTTON", "Tried to login, but not implemented yet :(")
-                },
+                onClick = onLoginButtonClick,
                 modifier = Modifier
                     .fillMaxWidth(0.4f)
                     .defaultMinSize(minWidth = 80.dp)
@@ -86,9 +86,7 @@ fun EntryPage() {
             }
 
             Button(
-                onClick = {
-                    Log.i("BUTTON", "Tried to register, but not implemented yet :(")
-                },
+                onClick = onRegistrationButtonClick,
                 modifier = Modifier
                     .fillMaxWidth(0.4f)
                     .defaultMinSize(minWidth = 80.dp)
@@ -105,5 +103,5 @@ fun EntryPage() {
 @Preview
 @Composable
 fun EntryPagePreview() {
-    EntryPage()
+    EntryPage({}, {})
 }

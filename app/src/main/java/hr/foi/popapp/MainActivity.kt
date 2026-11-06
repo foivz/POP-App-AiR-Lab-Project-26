@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import hr.foi.popapp.login_username_password.UsernamePasswordLoginHandler
 import hr.foi.popapp.navigation.components.EntryPage
 import hr.foi.popapp.navigation.components.LoginPage
 import hr.foi.popapp.navigation.components.PostRegistrationNotice
@@ -21,6 +22,9 @@ import hr.foi.popapp.navigation.components.RegistrationPage
 import hr.foi.popapp.ui.theme.POPAppTheme
 
 class MainActivity : ComponentActivity() {
+    private val loginHandlers = listOf(UsernamePasswordLoginHandler())
+    private val currentLoginHandler = loginHandlers[0]
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -64,7 +68,8 @@ class MainActivity : ComponentActivity() {
                                 LoginPage(
                                     onSuccessfulLogin = {
                                         navController.navigate("entry")
-                                    }
+                                    },
+                                    currentLoginHandler
                                 )
                             }
                         }

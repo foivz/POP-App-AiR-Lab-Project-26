@@ -1,4 +1,4 @@
-package hr.foi.popapp.ws.models
+package hr.foi.popapp.ws.models.responses
 
 import com.google.gson.annotations.SerializedName
 

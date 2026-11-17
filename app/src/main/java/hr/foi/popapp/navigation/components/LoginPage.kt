@@ -20,8 +20,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import hr.foi.popapp.core.LoginHandler
-import hr.foi.popapp.core.LoginOutcomeListener
+import hr.foi.popapp.core.login.LoginHandler
+import hr.foi.popapp.core.login.LoginOutcomeListener
+import hr.foi.popapp.core.login.LoginUserData
 import hr.foi.popapp.login_username_password.UsernamePasswordLoginHandler
 import hr.foi.popapp.login_username_password.UsernamePasswordLoginToken
 import hr.foi.popapp.ui.components.PasswordTextField
@@ -37,6 +38,7 @@ fun LoginPage(
     var password by remember { mutableStateOf("") }
 
     var errorMessage by remember { mutableStateOf("") }
+    var awaitingResponse by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -72,21 +74,23 @@ fun LoginPage(
 
         StyledButton(
             label = "Login",
+            enabled = !awaitingResponse,
             onClick = {
-                val usernamePasswordToken = UsernamePasswordLoginToken(
-                    username, password
-                )
-                loginHandler.handleLogin(usernamePasswordToken,
-                    object : LoginOutcomeListener {
-                        override fun onSuccessfulLogin(username: String) {
-                            onSuccessfulLogin()
-                        }
+                val usernamePasswordToken = UsernamePasswordLoginToken(username, password)
 
-                        override fun onFailedLogin(reason: String) {
-                            errorMessage = reason
-                        }
+                awaitingResponse = true
+
+                loginHandler.handleLogin(usernamePasswordToken, object : LoginOutcomeListener {
+                    override fun onSuccessfulLogin(loginUserData: LoginUserData) {
+                        awaitingResponse = false
+                        onSuccessfulLogin()
                     }
-                )
+
+                    override fun onFailedLogin(reason: String) {
+                        awaitingResponse = false
+                        errorMessage = reason
+                    }
+                })
             }
         )
     }

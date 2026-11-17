@@ -6,7 +6,7 @@ import hr.foi.popapp.core.network.ResponseListener
 import hr.foi.popapp.core.network.models.ErrorResponseBody
 import hr.foi.popapp.core.network.models.SuccessfulResponseBody
 import hr.foi.popapp.ws.models.RegistrationBody
-import hr.foi.popapp.ws.models.RegisteredUser
+import hr.foi.popapp.ws.models.responses.RegisteredUser
 import hr.foi.popapp.ws.network.NetworkService
 import retrofit2.Call
 import retrofit2.Callback

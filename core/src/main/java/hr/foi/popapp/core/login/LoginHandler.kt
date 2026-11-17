@@ -1,4 +1,4 @@
-package hr.foi.popapp.core
+package hr.foi.popapp.core.login
 
 interface LoginHandler {
 

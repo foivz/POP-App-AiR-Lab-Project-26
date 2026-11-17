@@ -1,6 +1,6 @@
 package hr.foi.popapp.login_username_password
 
-import hr.foi.popapp.core.LoginToken
+import hr.foi.popapp.core.login.LoginToken
 
 class UsernamePasswordLoginToken(username: String, password: String) : LoginToken {
 

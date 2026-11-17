@@ -1,4 +1,4 @@
-package hr.foi.popapp.network
+package hr.foi.popapp.ws.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

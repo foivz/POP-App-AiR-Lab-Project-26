@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,18 +23,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import hr.foi.popapp.models.Role
-import hr.foi.popapp.models.availableRoles
-import hr.foi.popapp.network.NetworkService
-import hr.foi.popapp.network.models.RegistrationBody
-import hr.foi.popapp.network.models.ResponseBody
+import hr.foi.popapp.core.network.ResponseListener
+import hr.foi.popapp.core.network.models.ErrorResponseBody
+import hr.foi.popapp.core.network.models.SuccessfulResponseBody
 import hr.foi.popapp.ui.components.PasswordTextField
 import hr.foi.popapp.ui.components.RoleSelector
 import hr.foi.popapp.ui.components.StyledButton
 import hr.foi.popapp.ui.components.StyledTextField
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import hr.foi.popapp.ws.models.RegistrationBody
+import hr.foi.popapp.ws.models.Role
+import hr.foi.popapp.ws.request_handlers.RegistrationRequestHandler
 
 @Composable
 fun RegistrationPage(
@@ -61,6 +62,11 @@ fun RegistrationPage(
     var errorMessage by remember {
         mutableStateOf("")
     }
+
+    val availableRoles = listOf(
+        Role("Buyer", Icons.Default.Person, "buyer"),
+        Role("Seller", Icons.Default.ShoppingCart, "seller")
+    )
 
     Column(
         modifier = Modifier
@@ -98,7 +104,7 @@ fun RegistrationPage(
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
         )
 
-        var selectedRole by remember { mutableStateOf<Role>(availableRoles[0])}
+        var selectedRole by remember { mutableStateOf(availableRoles[0])}
         RoleSelector(
             roles = availableRoles,
             selected = selectedRole,
@@ -112,25 +118,32 @@ fun RegistrationPage(
             enabled = !isAwaitingResponse,
             onClick = {
                 val requestBody = RegistrationBody(
-                    firstName, lastName, username, email, password, selectedRole.apiValue
+                    firstName,
+                    lastName,
+                    username,
+                    email,
+                    password,
+                    "buyer"
                 )
 
+                val registrationRequestHandler = RegistrationRequestHandler(requestBody)
                 isAwaitingResponse = true
-                errorMessage = ""
 
-                NetworkService.authService.registerUser(requestBody).enqueue(object : Callback<ResponseBody> {
-                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                registrationRequestHandler.sendRequest(object : ResponseListener {
+                    override fun <T> onSuccessfulResponse(response: SuccessfulResponseBody<T>) {
                         isAwaitingResponse = false
-                        if (response.body()?.success == true) {
-                            onSuccessfulRegistration(username)
-                        } else {
-                            errorMessage = "Registration failed. Check the entered data."
-                        }
+                        onSuccessfulRegistration(username)
                     }
 
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    override fun onErrorResponse(response: ErrorResponseBody) {
                         isAwaitingResponse = false
-                        errorMessage = "Couldn't contact the server."
+
+                        errorMessage = response.message
+                    }
+
+                    override fun onNetworkFailure(t: Throwable) {
+                        isAwaitingResponse = false
+                        errorMessage = "Network error occured, please try again later..."
                     }
                 })
             }

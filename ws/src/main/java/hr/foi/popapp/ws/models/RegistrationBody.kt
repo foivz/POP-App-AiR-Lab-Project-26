@@ -1,4 +1,4 @@
-package hr.foi.popapp.network.models
+package hr.foi.popapp.ws.models
 
 // Property names match the JSON keys the API expects.
 data class RegistrationBody(

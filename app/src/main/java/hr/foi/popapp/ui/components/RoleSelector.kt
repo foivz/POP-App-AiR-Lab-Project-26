@@ -6,7 +6,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import hr.foi.popapp.models.Role
+import hr.foi.popapp.ws.models.Role
 
 @Composable
 fun RoleSelector(

@@ -16,15 +16,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.foi.popapp.models.Role
 import hr.foi.popapp.models.availableRoles
+import hr.foi.popapp.network.NetworkService
+import hr.foi.popapp.network.models.RegistrationBody
+import hr.foi.popapp.network.models.ResponseBody
 import hr.foi.popapp.ui.components.PasswordTextField
 import hr.foi.popapp.ui.components.RoleSelector
 import hr.foi.popapp.ui.components.StyledButton
 import hr.foi.popapp.ui.components.StyledTextField
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun RegistrationPage(
@@ -48,6 +55,12 @@ fun RegistrationPage(
     var confirmPassword by remember {
         mutableStateOf("")
     }
+    var isAwaitingResponse by remember {
+        mutableStateOf(false)
+    }
+    var errorMessage by remember {
+        mutableStateOf("")
+    }
 
     Column(
         modifier = Modifier
@@ -60,6 +73,13 @@ fun RegistrationPage(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(vertical = 16.dp)
         )
+
+        if (errorMessage != "") {
+            Text(
+                text = errorMessage,
+                color = Color.Red
+            )
+        }
 
         StyledTextField(label = "First name", value = firstName, onValueChange = { firstName = it })
 
@@ -89,8 +109,31 @@ fun RegistrationPage(
 
         StyledButton(
             label = "Register",
-            // No API yet, so every registration is treated as successful.
-            onClick = { onSuccessfulRegistration(username) }
+            enabled = !isAwaitingResponse,
+            onClick = {
+                val requestBody = RegistrationBody(
+                    firstName, lastName, username, email, password, selectedRole.apiValue
+                )
+
+                isAwaitingResponse = true
+                errorMessage = ""
+
+                NetworkService.authService.registerUser(requestBody).enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        isAwaitingResponse = false
+                        if (response.body()?.success == true) {
+                            onSuccessfulRegistration(username)
+                        } else {
+                            errorMessage = "Registration failed. Check the entered data."
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        isAwaitingResponse = false
+                        errorMessage = "Couldn't contact the server."
+                    }
+                })
+            }
         )
     }
 }

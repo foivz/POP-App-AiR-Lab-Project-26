@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import hr.foi.popapp.core.login.Auth
 import hr.foi.popapp.login_username_password.UsernamePasswordLoginHandler
+import hr.foi.popapp.navigation.components.CreateStorePage
 import hr.foi.popapp.navigation.components.EntryPage
 import hr.foi.popapp.navigation.components.HomePage
 import hr.foi.popapp.navigation.components.LoginPage
@@ -103,7 +104,7 @@ class MainActivity : ComponentActivity() {
                                 TODO()
                             }
                             composable("create-store") {
-                                TODO()
+                                CreateStorePage {}
                             }
                         }
                     }

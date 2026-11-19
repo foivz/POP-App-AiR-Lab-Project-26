@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import hr.foi.popapp.core.login.Auth
 import hr.foi.popapp.login_username_password.UsernamePasswordLoginHandler
 import hr.foi.popapp.navigation.components.EntryPage
 import hr.foi.popapp.navigation.components.HomePage
@@ -70,7 +71,15 @@ class MainActivity : ComponentActivity() {
                             composable("login") {
                                 LoginPage(
                                     onSuccessfulLogin = {
-                                        navController.navigate("home")
+                                        val userData = Auth.loggedInUserData!!
+                                        // Always show the store maps after login (even if the user already has a store),
+                                        // so the whole class can share one seller and one buyer account.
+                                        val destination = when (userData.role) {
+                                            "seller" -> "create-store"
+                                            "buyer" -> "select-store"
+                                            else -> "home"
+                                        }
+                                        navController.navigate(destination)
                                     },
                                     currentLoginHandler
                                 )
@@ -89,6 +98,12 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("products") {
                                 ProductPage()
+                            }
+                            composable("select-store") {
+                                TODO()
+                            }
+                            composable("create-store") {
+                                TODO()
                             }
                         }
                     }

@@ -24,6 +24,7 @@ import hr.foi.popapp.navigation.components.LoginPage
 import hr.foi.popapp.navigation.components.PostRegistrationNotice
 import hr.foi.popapp.navigation.components.ProductPage
 import hr.foi.popapp.navigation.components.RegistrationPage
+import hr.foi.popapp.navigation.components.SelectStorePage
 import hr.foi.popapp.ui.theme.POPAppTheme
 
 class MainActivity : ComponentActivity() {

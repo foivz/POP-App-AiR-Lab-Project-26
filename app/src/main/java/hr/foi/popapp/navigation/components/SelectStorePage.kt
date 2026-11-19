@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,7 +45,7 @@ fun SelectStorePage(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 20.dp)
     ) {
-        val isStoreSelected by remember { mutableStateOf(false) }
+        var selectedStore by remember { mutableStateOf<Store?>(null) }
         val cameraState = rememberCameraState {
             geoPoint = GeoPoint(46.307679, 16.338106)
             zoom = 18.5
@@ -99,14 +100,18 @@ fun SelectStorePage(
                     state = markerState,
                     infoWindowContent = {
                         Text(text = store.name!!)
+                    },
+                    onClick = {
+                        selectedStore = store
+                        true
                     }
                 )
             }
         }
 
         StyledButton(
-            label = "I've selected my store",
-            enabled = isStoreSelected,
+            label = selectedStore?.name ?: "Select a store",
+            enabled = selectedStore != null,
             onClick = { }
         )
     }

@@ -20,7 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.utsman.osmandcompose.MapProperties
+import com.utsman.osmandcompose.Marker
+import com.utsman.osmandcompose.MarkerState
 import com.utsman.osmandcompose.OpenStreetMap
 import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.rememberCameraState
@@ -29,6 +32,7 @@ import org.osmdroid.util.GeoPoint
 
 @Composable
 fun SelectStorePage(
+    viewModel: StoresViewModel = viewModel(),
     onStoreSelected: () -> Unit
 ) {
     Column(
@@ -41,6 +45,23 @@ fun SelectStorePage(
             geoPoint = GeoPoint(46.307679, 16.338106)
             zoom = 18.5
             speed = 10
+        }
+
+        val stores by viewModel.stores.observeAsState()
+        viewModel.fetchStores()
+        val storeMarkers = mutableListOf<MarkerState>()
+
+        stores?.let {
+            for (store in it) {
+                storeMarkers.add(
+                    rememberMarkerState(
+                        geoPoint = GeoPoint(
+                            store.latitude!!,
+                            store.longitude!!
+                        )
+                    )
+                )
+            }
         }
 
         Text(
@@ -68,7 +89,13 @@ fun SelectStorePage(
                 zoomButtonVisibility = ZoomButtonVisibility.NEVER,
                 isTilesScaledToDpi = true
             )
-        )
+        ) {
+            storeMarkers.forEach { markerState ->
+                Marker(
+                    state = markerState
+                )
+            }
+        }
 
         StyledButton(
             label = "I've selected my store",

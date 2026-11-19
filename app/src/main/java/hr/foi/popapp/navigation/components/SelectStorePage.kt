@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,7 +28,10 @@ import com.utsman.osmandcompose.MarkerState
 import com.utsman.osmandcompose.OpenStreetMap
 import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.rememberCameraState
+import com.utsman.osmandcompose.rememberMarkerState
 import hr.foi.popapp.ui.components.StyledButton
+import hr.foi.popapp.viewmodels.StoresViewModel
+import hr.foi.popapp.ws.models.responses.Store
 import org.osmdroid.util.GeoPoint
 
 @Composable
@@ -49,7 +53,7 @@ fun SelectStorePage(
 
         val stores by viewModel.stores.observeAsState()
         viewModel.fetchStores()
-        val storeMarkers = mutableListOf<MarkerState>()
+        val storeMarkers = mutableListOf<Pair<MarkerState, Store>>()
 
         stores?.let {
             for (store in it) {
@@ -59,7 +63,7 @@ fun SelectStorePage(
                             store.latitude!!,
                             store.longitude!!
                         )
-                    )
+                    ) to store
                 )
             }
         }
@@ -90,9 +94,12 @@ fun SelectStorePage(
                 isTilesScaledToDpi = true
             )
         ) {
-            storeMarkers.forEach { markerState ->
+            storeMarkers.forEach { (markerState, store) ->
                 Marker(
-                    state = markerState
+                    state = markerState,
+                    infoWindowContent = {
+                        Text(text = store.name!!)
+                    }
                 )
             }
         }

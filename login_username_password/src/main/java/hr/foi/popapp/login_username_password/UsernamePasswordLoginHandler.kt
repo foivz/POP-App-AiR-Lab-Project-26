@@ -27,9 +27,9 @@ class UsernamePasswordLoginHandler : LoginHandler {
         val loginRequestHandler = LoginRequestHandler(LoginBody(username, password))
 
         loginRequestHandler.sendRequest(
-            object : ResponseListener {
-                override fun <T> onSuccessfulResponse(response: SuccessfulResponseBody<T>) {
-                    val loginUserData = response.data[0] as LoggedInUserData
+            object : ResponseListener<LoggedInUserData> {
+                override fun onSuccessfulResponse(response: SuccessfulResponseBody<LoggedInUserData>) {
+                    val loginUserData = response.data[0]
 
                     loginListener.onSuccessfulLogin(
                         LoginUserData(

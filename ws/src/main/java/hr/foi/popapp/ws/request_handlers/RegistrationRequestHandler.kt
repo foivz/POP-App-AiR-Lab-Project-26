@@ -12,8 +12,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegistrationRequestHandler(private val requestBody: RegistrationBody) : RequestHandler {
-    override fun sendRequest(responseListener: ResponseListener) {
+class RegistrationRequestHandler(private val requestBody: RegistrationBody) : RequestHandler<RegisteredUser> {
+    override fun sendRequest(responseListener: ResponseListener<RegisteredUser>) {
         val service = NetworkService.authService
         val serviceCall = service.registerUser(requestBody)
 

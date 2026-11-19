@@ -12,8 +12,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginRequestHandler(private val requestBody: LoginBody) : RequestHandler {
-    override fun sendRequest(responseListener: ResponseListener) {
+class LoginRequestHandler(private val requestBody: LoginBody) : RequestHandler<LoggedInUserData> {
+    override fun sendRequest(responseListener: ResponseListener<LoggedInUserData>) {
         val service = NetworkService.authService
         val serviceCall = service.loginUser(requestBody)
 
@@ -24,7 +24,7 @@ class LoginRequestHandler(private val requestBody: LoginBody) : RequestHandler {
                 response: Response<SuccessfulResponseBody<LoggedInUserData>>
             ) {
                 if (response.isSuccessful) {
-                    responseListener.onSuccessfulResponse(response.body() as SuccessfulResponseBody<LoggedInUserData>)
+                    responseListener.onSuccessfulResponse(response.body()!!)
                 } else {
                     val errorResponse = Gson().fromJson(response.errorBody()?.string(), ErrorResponseBody::class.java)
                     responseListener.onErrorResponse(errorResponse)

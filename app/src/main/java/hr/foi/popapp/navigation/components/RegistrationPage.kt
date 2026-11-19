@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import hr.foi.popapp.core.network.ResponseListener
 import hr.foi.popapp.core.network.models.ErrorResponseBody
 import hr.foi.popapp.core.network.models.SuccessfulResponseBody
+import hr.foi.popapp.ws.models.responses.RegisteredUser
 import hr.foi.popapp.ui.components.PasswordTextField
 import hr.foi.popapp.ui.components.RoleSelector
 import hr.foi.popapp.ui.components.StyledButton
@@ -129,8 +130,8 @@ fun RegistrationPage(
                 val registrationRequestHandler = RegistrationRequestHandler(requestBody)
                 isAwaitingResponse = true
 
-                registrationRequestHandler.sendRequest(object : ResponseListener {
-                    override fun <T> onSuccessfulResponse(response: SuccessfulResponseBody<T>) {
+                registrationRequestHandler.sendRequest(object : ResponseListener<RegisteredUser> {
+                    override fun onSuccessfulResponse(response: SuccessfulResponseBody<RegisteredUser>) {
                         isAwaitingResponse = false
                         onSuccessfulRegistration(username)
                     }

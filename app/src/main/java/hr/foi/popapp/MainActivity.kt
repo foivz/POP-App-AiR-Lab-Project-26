@@ -101,10 +101,14 @@ class MainActivity : ComponentActivity() {
                                 ProductPage()
                             }
                             composable("select-store") {
-                                TODO()
+                                SelectStorePage(onStoreSelected = {
+                                    navController.navigate("home")
+                                })
                             }
                             composable("create-store") {
-                                CreateStorePage {}
+                                CreateStorePage(onStoreCreated = {
+                                    navController.navigate("home")
+                                })
                             }
                         }
                     }

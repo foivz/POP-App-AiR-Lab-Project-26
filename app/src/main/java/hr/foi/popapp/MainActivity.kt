@@ -20,7 +20,7 @@ import hr.foi.popapp.navigation.components.EntryPage
 import hr.foi.popapp.navigation.components.HomePage
 import hr.foi.popapp.navigation.components.LoginPage
 import hr.foi.popapp.navigation.components.PostRegistrationNotice
-import hr.foi.popapp.navigation.components.ProductsPage
+import hr.foi.popapp.navigation.components.ProductPage
 import hr.foi.popapp.navigation.components.RegistrationPage
 import hr.foi.popapp.ui.theme.POPAppTheme
 
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
                                 })
                             }
                             composable("products") {
-                                ProductsPage()
+                                ProductPage()
                             }
                         }
                     }

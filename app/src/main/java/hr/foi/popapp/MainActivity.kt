@@ -15,13 +15,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import hr.foi.popapp.core.login.Auth
 import hr.foi.popapp.login_username_password.UsernamePasswordLoginHandler
+import hr.foi.popapp.navigation.components.CreateStorePage
 import hr.foi.popapp.navigation.components.EntryPage
 import hr.foi.popapp.navigation.components.HomePage
 import hr.foi.popapp.navigation.components.LoginPage
 import hr.foi.popapp.navigation.components.PostRegistrationNotice
 import hr.foi.popapp.navigation.components.ProductPage
 import hr.foi.popapp.navigation.components.RegistrationPage
+import hr.foi.popapp.navigation.components.SelectStorePage
 import hr.foi.popapp.ui.theme.POPAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -70,7 +73,15 @@ class MainActivity : ComponentActivity() {
                             composable("login") {
                                 LoginPage(
                                     onSuccessfulLogin = {
-                                        navController.navigate("home")
+                                        val userData = Auth.loggedInUserData!!
+                                        // Always show the store maps after login (even if the user already has a store),
+                                        // so the whole class can share one seller and one buyer account.
+                                        val destination = when (userData.role) {
+                                            "seller" -> "create-store"
+                                            "buyer" -> "select-store"
+                                            else -> "home"
+                                        }
+                                        navController.navigate(destination)
                                     },
                                     currentLoginHandler
                                 )
@@ -89,6 +100,16 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("products") {
                                 ProductPage()
+                            }
+                            composable("select-store") {
+                                SelectStorePage(onStoreSelected = {
+                                    navController.navigate("home")
+                                })
+                            }
+                            composable("create-store") {
+                                CreateStorePage(onStoreCreated = {
+                                    navController.navigate("home")
+                                })
                             }
                         }
                     }
